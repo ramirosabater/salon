@@ -92,17 +92,23 @@ export default function BookingFlow() {
     return m
   }, [servicios])
 
+  // Devuelve el mensaje de lo que falta en el paso actual, o null si está listo
+  function faltanteDePaso() {
+    if (paso === 0 && !sel.servicio) return 'Elegí un servicio para continuar.'
+    if (paso === 1 && !sel.profesionalId) return 'Elegí una profesional (o "Cualquiera disponible").'
+    if (paso === 2 && !sel.slot) return 'Elegí un día y un horario.'
+    if (paso === 3 && !usuario && (!invitado.nombre.trim() || !invitado.telefono.trim()))
+      return 'Completá tu nombre y WhatsApp para continuar.'
+    return null
+  }
+
   function avanzar() {
-    setError('')
-    if (paso === 0 && !sel.servicio) return
-    if (paso === 1 && !sel.profesionalId) return
-    if (paso === 2 && !sel.slot) return
-    if (paso === 3 && !usuario) {
-      if (!invitado.nombre.trim() || !invitado.telefono.trim()) {
-        setError('Completá tu nombre y WhatsApp para continuar.')
-        return
-      }
+    const msg = faltanteDePaso()
+    if (msg) {
+      setError(msg)
+      return
     }
+    setError('')
     setPaso((p) => Math.min(p + 1, PASOS.length - 1))
   }
   function volver() {
@@ -321,7 +327,11 @@ export default function BookingFlow() {
         {paso < 4 ? (
           <button
             onClick={avanzar}
-            className="rounded-lg bg-[#e3b23c] px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-[#d4a226]"
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+              faltanteDePaso()
+                ? 'bg-neutral-800 text-neutral-500'
+                : 'bg-[#e3b23c] text-neutral-950 hover:bg-[#d4a226]'
+            }`}
           >
             Continuar →
           </button>
