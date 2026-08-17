@@ -4,7 +4,7 @@ import AdminAgenda from '@/components/AdminAgenda'
 
 export default function AdminPage() {
   return (
-    <main className="min-h-screen bg-neutral-50 py-6">
+    <main className="min-h-screen bg-neutral-950 text-neutral-200 py-6">
       <AdminAgenda />
     </main>
   )

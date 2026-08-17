@@ -142,18 +142,18 @@ export default function BookingFlow() {
     return (
       <Marco>
         <div className="py-10 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-300">
             <Check />
           </div>
-          <h2 className="text-lg font-medium text-neutral-900">¡Turno confirmado!</h2>
-          <p className="mt-1 text-sm text-neutral-500">Guardá la fecha. Te esperamos en el salón.</p>
-          <div className="mx-auto mt-6 max-w-sm rounded-xl bg-neutral-50 p-4 text-left">
-            <p className="font-medium text-neutral-900">{sel.servicio.nombre}</p>
-            <p className="mt-1 text-sm text-neutral-500">
+          <h2 className="text-lg font-medium text-neutral-100">¡Turno confirmado!</h2>
+          <p className="mt-1 text-sm text-neutral-400">Guardá la fecha. Te esperamos en el salón.</p>
+          <div className="mx-auto mt-6 max-w-sm rounded-xl bg-white/5 p-4 text-left">
+            <p className="font-medium text-neutral-100">{sel.servicio.nombre}</p>
+            <p className="mt-1 text-sm text-neutral-400">
               {fmtFechaLarga(sel.slot.inicio)} · {fmtHora(sel.slot.inicio)}
             </p>
           </div>
-          <a href="/" className="mt-6 inline-block text-sm text-rose-500 underline">Volver al inicio</a>
+          <a href="/" className="mt-6 inline-block text-sm text-[#e3b23c] underline">Volver al inicio</a>
         </div>
       </Marco>
     )
@@ -164,8 +164,8 @@ export default function BookingFlow() {
       <div className="mb-6 flex items-center gap-1.5">
         {PASOS.map((s, i) => (
           <div key={s} className="flex flex-1 flex-col items-center gap-1.5">
-            <div className={`h-1 w-full rounded-full ${i <= paso ? 'bg-rose-400' : 'bg-neutral-200'}`} />
-            <span className={`text-[11px] ${i === paso ? 'text-rose-500' : 'text-neutral-400'}`}>{s}</span>
+            <div className={`h-1 w-full rounded-full ${i <= paso ? 'bg-[#e3b23c]' : 'bg-neutral-200'}`} />
+            <span className={`text-[11px] ${i === paso ? 'text-[#e3b23c]' : 'text-neutral-500'}`}>{s}</span>
           </div>
         ))}
       </div>
@@ -175,7 +175,7 @@ export default function BookingFlow() {
           <Seccion titulo="¿Qué te querés hacer?" sub="Elegí un servicio para empezar">
             {Object.entries(serviciosPorCat).map(([cat, items]) => (
               <div key={cat}>
-                <p className="mt-4 mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500">{cat}</p>
+                <p className="mt-4 mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">{cat}</p>
                 {items.map((s) => (
                   <Fila
                     key={s.id}
@@ -183,8 +183,8 @@ export default function BookingFlow() {
                     onClick={() => setSel((v) => ({ ...v, servicio: s, profesionalId: null, slot: null }))}
                   >
                     <div className="flex-1">
-                      <p className="font-medium text-neutral-900">{s.nombre}</p>
-                      <p className="text-sm text-neutral-500">{s.duracion_min} min</p>
+                      <p className="font-medium text-neutral-100">{s.nombre}</p>
+                      <p className="text-sm text-neutral-400">{s.duracion_min} min</p>
                     </div>
                     <span className="font-medium">{money(s.precio)}</span>
                   </Fila>
@@ -201,8 +201,8 @@ export default function BookingFlow() {
               onClick={() => setSel((v) => ({ ...v, profesionalId: 'any', slot: null }))}
             >
               <div className="flex-1">
-                <p className="font-medium text-neutral-900">Cualquiera disponible</p>
-                <p className="text-sm text-neutral-500">Te asignamos la que tenga lugar antes</p>
+                <p className="font-medium text-neutral-100">Cualquiera disponible</p>
+                <p className="text-sm text-neutral-400">Te asignamos la que tenga lugar antes</p>
               </div>
             </Fila>
             {profesionales.map((p) => (
@@ -211,12 +211,12 @@ export default function BookingFlow() {
                 activo={sel.profesionalId === p.id}
                 onClick={() => setSel((v) => ({ ...v, profesionalId: p.id, slot: null }))}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-100 font-medium text-rose-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c9a227]/15 font-medium text-[#e3b23c]">
                   {p.nombre[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-neutral-900">{p.nombre}</p>
-                  {p.bio && <p className="text-sm text-neutral-500">{p.bio}</p>}
+                  <p className="font-medium text-neutral-100">{p.nombre}</p>
+                  {p.bio && <p className="text-sm text-neutral-400">{p.bio}</p>}
                 </div>
               </Fila>
             ))}
@@ -234,10 +234,10 @@ export default function BookingFlow() {
                     key={iso}
                     onClick={() => setSel((v) => ({ ...v, fecha: iso, slot: null }))}
                     className={`flex min-w-[56px] flex-col items-center rounded-lg border px-3 py-2 ${
-                      activo ? 'border-rose-400 ring-1 ring-rose-400' : 'border-neutral-200'
+                      activo ? 'border-[#c9a227] ring-1 ring-[#c9a227]' : 'border-neutral-800'
                     }`}
                   >
-                    <span className="text-[11px] text-neutral-500">
+                    <span className="text-[11px] text-neutral-400">
                       {d.toLocaleDateString('es-AR', { weekday: 'short' })}
                     </span>
                     <span className="text-base font-medium">{d.getDate()}</span>
@@ -246,10 +246,10 @@ export default function BookingFlow() {
               })}
             </div>
 
-            {!sel.fecha && <p className="text-sm text-neutral-400">Elegí un día para ver horarios.</p>}
-            {cargando && <p className="text-sm text-neutral-400">Buscando horarios…</p>}
+            {!sel.fecha && <p className="text-sm text-neutral-500">Elegí un día para ver horarios.</p>}
+            {cargando && <p className="text-sm text-neutral-500">Buscando horarios…</p>}
             {sel.fecha && !cargando && horasUnicas.length === 0 && (
-              <p className="text-sm text-neutral-400">No hay horarios libres ese día. Probá otro.</p>
+              <p className="text-sm text-neutral-500">No hay horarios libres ese día. Probá otro.</p>
             )}
             {horasUnicas.length > 0 && (
               <div className="grid grid-cols-4 gap-2">
@@ -260,7 +260,7 @@ export default function BookingFlow() {
                       key={s.inicio}
                       onClick={() => setSel((v) => ({ ...v, slot: s }))}
                       className={`rounded-lg border py-2.5 text-sm font-medium ${
-                        activo ? 'border-rose-400 ring-1 ring-rose-400' : 'border-neutral-200'
+                        activo ? 'border-[#c9a227] ring-1 ring-[#c9a227]' : 'border-neutral-800'
                       }`}
                     >
                       {fmtHora(s.inicio)}
@@ -275,7 +275,7 @@ export default function BookingFlow() {
         {paso === 3 && (
           <Seccion titulo="Tus datos" sub="Para confirmarte el turno y avisarte recordatorios">
             {usuario ? (
-              <div className="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-800">
+              <div className="rounded-lg bg-emerald-500/10 p-4 text-sm text-emerald-300">
                 Sesión iniciada como {usuario.email}. Ya podés confirmar.
               </div>
             ) : (
@@ -291,7 +291,7 @@ export default function BookingFlow() {
 
         {paso === 4 && (
           <Seccion titulo="Revisá tu turno">
-            <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-200">
+            <div className="divide-y divide-neutral-800 rounded-lg border border-neutral-800">
               <ResumenFila label="Servicio" val={sel.servicio.nombre} />
               <ResumenFila
                 label="Profesional"
@@ -302,26 +302,26 @@ export default function BookingFlow() {
               <ResumenFila label="A nombre de" val={usuario ? usuario.email : invitado.nombre} />
             </div>
             <div className="flex items-center justify-between px-1 pt-3">
-              <span className="text-sm text-neutral-500">Total</span>
+              <span className="text-sm text-neutral-400">Total</span>
               <span className="text-xl font-medium">{money(sel.servicio.precio)}</span>
             </div>
-            <p className="mt-3 text-xs text-neutral-400">
+            <p className="mt-3 text-xs text-neutral-500">
               El pago se abona en el salón. Podés cancelar hasta 4 h antes.
             </p>
           </Seccion>
         )}
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
       <div className="mt-4 flex items-center justify-between">
-        <button onClick={volver} className={`text-sm text-neutral-600 ${paso === 0 ? 'invisible' : ''}`}>
+        <button onClick={volver} className={`text-sm text-neutral-400 ${paso === 0 ? 'invisible' : ''}`}>
           ← Atrás
         </button>
         {paso < 4 ? (
           <button
             onClick={avanzar}
-            className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+            className="rounded-lg bg-[#e3b23c] px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-[#d4a226]"
           >
             Continuar →
           </button>
@@ -329,7 +329,7 @@ export default function BookingFlow() {
           <button
             onClick={confirmar}
             disabled={cargando}
-            className="rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white hover:bg-rose-600 disabled:opacity-60"
+            className="rounded-lg bg-[#e3b23c] px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-[#d4a226] disabled:opacity-60"
           >
             {cargando ? 'Confirmando…' : 'Confirmar turno'}
           </button>
@@ -346,7 +346,7 @@ function DatosInvitado({ invitado, setInvitado, onLogin, onError }) {
     return (
       <div>
         <AuthInline onListo={onLogin} onError={onError} />
-        <button onClick={() => setMostrarLogin(false)} className="mt-3 w-full text-center text-sm text-neutral-500">
+        <button onClick={() => setMostrarLogin(false)} className="mt-3 w-full text-center text-sm text-neutral-400">
           ← Reservar como invitado
         </button>
       </div>
@@ -358,8 +358,8 @@ function DatosInvitado({ invitado, setInvitado, onLogin, onError }) {
         onChange={(v) => setInvitado({ ...invitado, nombre: v })} placeholder="María Pérez" />
       <Input label="WhatsApp" value={invitado.telefono}
         onChange={(v) => setInvitado({ ...invitado, telefono: v })} placeholder="11 2345 6789" type="tel" />
-      <p className="text-xs text-neutral-400">No necesitás cuenta para reservar.</p>
-      <button onClick={() => setMostrarLogin(true)} className="w-full text-center text-sm text-rose-500">
+      <p className="text-xs text-neutral-500">No necesitás cuenta para reservar.</p>
+      <button onClick={() => setMostrarLogin(true)} className="w-full text-center text-sm text-[#e3b23c]">
         ¿Ya sos cliente? Iniciá sesión
       </button>
     </div>
@@ -406,11 +406,11 @@ function AuthInline({ onListo, onError }) {
       <Input label="Email" value={email} onChange={setEmail} placeholder="maria@email.com" type="email" />
       <Input label="Contraseña" value={pass} onChange={setPass} placeholder="••••••••" type="password" />
       <button onClick={submit} disabled={cargando}
-        className="w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-medium text-white disabled:opacity-60">
+        className="w-full rounded-lg bg-[#e3b23c] py-2.5 text-sm font-medium text-neutral-950 disabled:opacity-60">
         {cargando ? 'Un momento…' : modo === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
       </button>
       <button onClick={() => setModo(modo === 'login' ? 'registro' : 'login')}
-        className="w-full text-center text-sm text-neutral-500">
+        className="w-full text-center text-sm text-neutral-400">
         {modo === 'login' ? '¿No tenés cuenta? Registrate' : '¿Ya tenés cuenta? Iniciá sesión'}
       </button>
     </div>
@@ -420,14 +420,14 @@ function AuthInline({ onListo, onError }) {
 // ---------- Piezas de UI ----------
 function Marco({ children }) {
   return (
-    <div className="mx-auto max-w-xl rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">{children}</div>
+    <div className="mx-auto max-w-xl rounded-2xl border border-neutral-800 bg-neutral-900 p-5 sm:p-6">{children}</div>
   )
 }
 function Seccion({ titulo, sub, children }) {
   return (
     <div>
-      <h2 className="text-lg font-medium text-neutral-900">{titulo}</h2>
-      {sub && <p className="mb-3 text-sm text-neutral-500">{sub}</p>}
+      <h2 className="text-lg font-medium text-neutral-100">{titulo}</h2>
+      {sub && <p className="mb-3 text-sm text-neutral-400">{sub}</p>}
       {children}
     </div>
   )
@@ -437,7 +437,7 @@ function Fila({ activo, onClick, children }) {
     <div
       onClick={onClick}
       className={`mb-2 flex cursor-pointer items-center gap-3 rounded-lg border p-3 ${
-        activo ? 'border-rose-400 ring-1 ring-rose-400' : 'border-neutral-200 hover:border-neutral-300'
+        activo ? 'border-[#c9a227] ring-1 ring-[#c9a227]' : 'border-neutral-800 hover:border-neutral-700'
       }`}
     >
       {children}
@@ -447,7 +447,7 @@ function Fila({ activo, onClick, children }) {
 function ResumenFila({ label, val }) {
   return (
     <div className="flex items-center justify-between px-3.5 py-3">
-      <span className="text-sm text-neutral-500">{label}</span>
+      <span className="text-sm text-neutral-400">{label}</span>
       <span className="text-right text-sm font-medium">{val}</span>
     </div>
   )
@@ -455,13 +455,13 @@ function ResumenFila({ label, val }) {
 function Input({ label, value, onChange, placeholder, type = 'text' }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm text-neutral-500">{label}</span>
+      <span className="mb-1 block text-sm text-neutral-400">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400"
+        className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm outline-none focus:border-[#c9a227] focus:ring-1 focus:ring-[#c9a227]"
       />
     </label>
   )

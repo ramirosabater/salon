@@ -72,16 +72,16 @@ export default function RegistroProfesional() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
-      <a href="/" className="mb-6 text-center text-sm text-neutral-400">← Salón Bella</a>
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6">
-        <h1 className="text-lg font-medium text-neutral-900">Soy del equipo</h1>
-        <p className="mb-4 text-sm text-neutral-500">
+      <a href="/" className="mb-6 text-center text-sm text-neutral-500">← Alma Nails</a>
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+        <h1 className="text-lg font-medium text-neutral-100">Soy del equipo</h1>
+        <p className="mb-4 text-sm text-neutral-400">
           Registrate con el código que te dio el salón para acceder a tu agenda.
         </p>
 
-        {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
+        {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 
-        {usuario === undefined && <p className="text-sm text-neutral-400">Cargando…</p>}
+        {usuario === undefined && <p className="text-sm text-neutral-500">Cargando…</p>}
 
         {/* Paso 1: crear cuenta (si no hay sesión) */}
         {usuario === null && (
@@ -91,7 +91,7 @@ export default function RegistroProfesional() {
             <Campo label="Email" value={email} onChange={setEmail} placeholder="sofia@email.com" type="email" />
             <Campo label="Contraseña" value={pass} onChange={setPass} placeholder="••••••••" type="password" />
             <button onClick={crearCuenta} disabled={cargando}
-              className="w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-medium text-white disabled:opacity-60">
+              className="w-full rounded-lg bg-[#e3b23c] py-2.5 text-sm font-medium text-neutral-950 disabled:opacity-60">
               {cargando ? 'Un momento…' : 'Crear mi cuenta'}
             </button>
           </div>
@@ -100,35 +100,35 @@ export default function RegistroProfesional() {
         {/* Paso 2: elegir ficha + código */}
         {usuario && (
           <div className="space-y-3">
-            <div className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">
+            <div className="rounded-lg bg-emerald-500/10 p-3 text-sm text-emerald-300">
               Cuenta lista. Ahora vinculá tu perfil.
             </div>
             <label className="block">
-              <span className="mb-1 block text-sm text-neutral-500">¿Cuál sos?</span>
+              <span className="mb-1 block text-sm text-neutral-400">¿Cuál sos?</span>
               <select
                 value={profId}
                 onChange={(e) => setProfId(e.target.value)}
-                className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
+                className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm"
               >
                 <option value="">Elegí tu nombre…</option>
                 {profes.map((p) => (
                   <option key={p.id} value={p.id}>{p.nombre}</option>
                 ))}
               </select>
-              <span className="mt-1 block text-xs text-neutral-400">
+              <span className="mt-1 block text-xs text-neutral-500">
                 Si no está tu nombre, pedile al salón que te agregue primero.
               </span>
             </label>
-            <Campo label="Código del salón" value={codigo} onChange={setCodigo} placeholder="BELLA2026" />
+            <Campo label="Código del salón" value={codigo} onChange={setCodigo} placeholder="ALMA2026" />
             <button onClick={canjear} disabled={cargando}
-              className="w-full rounded-lg bg-rose-500 py-2.5 text-sm font-medium text-white disabled:opacity-60">
+              className="w-full rounded-lg bg-[#e3b23c] py-2.5 text-sm font-medium text-neutral-950 disabled:opacity-60">
               {cargando ? 'Verificando…' : 'Activar mi acceso'}
             </button>
           </div>
         )}
       </div>
 
-      <a href="/login" className="mt-4 text-center text-sm text-neutral-500">
+      <a href="/login" className="mt-4 text-center text-sm text-neutral-400">
         ¿Ya tenés acceso? Ingresá
       </a>
     </div>
@@ -138,13 +138,13 @@ export default function RegistroProfesional() {
 function Campo({ label, value, onChange, placeholder, type = 'text' }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm text-neutral-500">{label}</span>
+      <span className="mb-1 block text-sm text-neutral-400">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400"
+        className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm outline-none focus:border-[#c9a227] focus:ring-1 focus:ring-[#c9a227]"
       />
     </label>
   )

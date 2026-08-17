@@ -4,7 +4,7 @@ import AdminServicios from '@/components/AdminServicios'
 
 export default function ServiciosPage() {
   return (
-    <main className="min-h-screen bg-neutral-50 py-6">
+    <main className="min-h-screen bg-neutral-950 text-neutral-200 py-6">
       <AdminServicios />
     </main>
   )

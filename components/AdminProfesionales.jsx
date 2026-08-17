@@ -191,20 +191,20 @@ export default function AdminProfesionales() {
   }, [servicios])
 
   // --- Acceso ---
-  if (perfil === undefined) return <Marco><p className="text-neutral-500">Cargando…</p></Marco>
+  if (perfil === undefined) return <Marco><p className="text-neutral-400">Cargando…</p></Marco>
   if (!perfil)
     return (
       <Marco>
         <h1 className="text-lg font-medium">Panel del salón</h1>
-        <p className="mt-2 text-sm text-neutral-500">Iniciá sesión desde la página principal y volvé.</p>
-        <a href="/" className="mt-4 inline-block text-sm text-rose-500 underline">Ir al inicio</a>
+        <p className="mt-2 text-sm text-neutral-400">Iniciá sesión desde la página principal y volvé.</p>
+        <a href="/" className="mt-4 inline-block text-sm text-[#e3b23c] underline">Ir al inicio</a>
       </Marco>
     )
   if (!esAdmin)
     return (
       <Marco>
         <h1 className="text-lg font-medium">Sin acceso</h1>
-        <p className="mt-2 text-sm text-neutral-500">Esta sección es solo para el personal del salón.</p>
+        <p className="mt-2 text-sm text-neutral-400">Esta sección es solo para el personal del salón.</p>
       </Marco>
     )
 
@@ -212,8 +212,8 @@ export default function AdminProfesionales() {
     <Marco>
       <AdminNav actual="profesionales" />
 
-      <div className="mb-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+      <div className="mb-4 rounded-lg border border-neutral-800 bg-white/5 p-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
           Código para que el equipo se registre
         </p>
         {editandoCodigo ? (
@@ -221,80 +221,80 @@ export default function AdminProfesionales() {
             <input
               value={codigoBorrador}
               onChange={(e) => setCodigoBorrador(e.target.value)}
-              className="flex-1 rounded-lg border border-neutral-200 px-3 py-1.5 text-sm"
+              className="flex-1 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-1.5 text-sm"
             />
-            <button onClick={guardarCodigo} className="rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white">Guardar</button>
-            <button onClick={() => setEditandoCodigo(false)} className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm">Cancelar</button>
+            <button onClick={guardarCodigo} className="rounded-lg bg-[#e3b23c] px-3 py-1.5 text-sm font-medium text-neutral-950">Guardar</button>
+            <button onClick={() => setEditandoCodigo(false)} className="rounded-lg border border-neutral-700 px-3 py-1.5 text-sm">Cancelar</button>
           </div>
         ) : (
           <div className="mt-1 flex items-center gap-3">
-            <span className="text-lg font-medium tracking-wider text-neutral-900">{codigo || '—'}</span>
+            <span className="text-lg font-medium tracking-wider text-neutral-100">{codigo || '—'}</span>
             <button
               onClick={() => { setCodigoBorrador(codigo); setEditandoCodigo(true) }}
-              className="rounded-md border border-neutral-200 px-2 py-1 text-xs text-neutral-600"
+              className="rounded-md border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-2 py-1 text-xs text-neutral-400"
             >
               Cambiar
             </button>
-            <span className="text-xs text-neutral-400">Compartilo solo con tus profesionales</span>
+            <span className="text-xs text-neutral-500">Compartilo solo con tus profesionales</span>
           </div>
         )}
       </div>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-medium text-neutral-900">Profesionales</h1>
+        <h1 className="text-xl font-medium text-neutral-100">Profesionales</h1>
         <button
           onClick={() => setMostrarAlta((v) => !v)}
-          className="rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white"
+          className="rounded-lg bg-[#e3b23c] px-3 py-1.5 text-sm font-medium text-neutral-950"
         >
           {mostrarAlta ? 'Cerrar' : '+ Nueva'}
         </button>
       </div>
 
-      {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
+      {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 
       {mostrarAlta && (
-        <div className="mb-5 flex gap-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+        <div className="mb-5 flex gap-2 rounded-lg border border-neutral-800 bg-white/5 p-3">
           <input
             value={nuevoNombre}
             onChange={(e) => setNuevoNombre(e.target.value)}
             placeholder="Nombre de la profesional"
-            className="flex-1 rounded-lg border border-neutral-200 px-3 py-2 text-sm"
+            className="flex-1 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm"
           />
-          <button onClick={crear} className="rounded-lg bg-rose-500 px-3 py-2 text-sm font-medium text-white">
+          <button onClick={crear} className="rounded-lg bg-[#e3b23c] px-3 py-2 text-sm font-medium text-neutral-950">
             Crear
           </button>
         </div>
       )}
 
-      {cargando && <p className="text-sm text-neutral-400">Cargando…</p>}
+      {cargando && <p className="text-sm text-neutral-500">Cargando…</p>}
 
       <div className="space-y-3">
         {profes.map((p) =>
           editId === p.id ? (
-            <div key={p.id} className="rounded-xl border border-rose-300 bg-rose-50 p-4">
+            <div key={p.id} className="rounded-xl border border-[#c9a227] bg-[#c9a227]/10 p-4">
               {/* Datos básicos */}
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-xs text-neutral-500">Nombre</label>
+                  <label className="mb-1 block text-xs text-neutral-400">Nombre</label>
                   <input
                     value={form.nombre}
                     onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-                    className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-neutral-500">Descripción (opcional)</label>
+                  <label className="mb-1 block text-xs text-neutral-400">Descripción (opcional)</label>
                   <input
                     value={form.bio}
                     onChange={(e) => setForm({ ...form, bio: e.target.value })}
                     placeholder="Especialista en uñas"
-                    className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm"
                   />
                 </div>
               </div>
 
               {/* Servicios que ofrece */}
-              <p className="mb-2 mt-4 text-sm font-medium text-neutral-700">Qué servicios hace</p>
+              <p className="mb-2 mt-4 text-sm font-medium text-neutral-300">Qué servicios hace</p>
               <div className="flex flex-wrap gap-2">
                 {servicios.map((s) => {
                   const on = serviciosSel.has(s.id)
@@ -303,7 +303,7 @@ export default function AdminProfesionales() {
                       key={s.id}
                       onClick={() => toggleServicio(s.id)}
                       className={`rounded-full border px-3 py-1 text-xs ${
-                        on ? 'border-rose-400 bg-rose-100 text-rose-700' : 'border-neutral-300 text-neutral-500'
+                        on ? 'border-[#c9a227] bg-[#c9a227]/15 text-[#e3b23c]' : 'border-neutral-700 text-neutral-400'
                       }`}
                     >
                       {on ? '✓ ' : ''}{s.nombre}
@@ -311,12 +311,12 @@ export default function AdminProfesionales() {
                   )
                 })}
                 {servicios.length === 0 && (
-                  <p className="text-xs text-neutral-400">No hay servicios cargados todavía.</p>
+                  <p className="text-xs text-neutral-500">No hay servicios cargados todavía.</p>
                 )}
               </div>
 
               {/* Horarios de trabajo */}
-              <p className="mb-2 mt-4 text-sm font-medium text-neutral-700">Horarios de trabajo</p>
+              <p className="mb-2 mt-4 text-sm font-medium text-neutral-300">Horarios de trabajo</p>
               <div className="space-y-1.5">
                 {DIAS.map((d) => {
                   const h = horarios[d.n]
@@ -335,15 +335,15 @@ export default function AdminProfesionales() {
                         value={h.desde}
                         disabled={!h.activo}
                         onChange={(e) => setDia(d.n, { desde: e.target.value })}
-                        className="rounded-lg border border-neutral-200 px-2 py-1 text-sm disabled:opacity-40"
+                        className="rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-2 py-1 text-sm disabled:opacity-40"
                       />
-                      <span className="text-neutral-400">a</span>
+                      <span className="text-neutral-500">a</span>
                       <input
                         type="time"
                         value={h.hasta}
                         disabled={!h.activo}
                         onChange={(e) => setDia(d.n, { hasta: e.target.value })}
-                        className="rounded-lg border border-neutral-200 px-2 py-1 text-sm disabled:opacity-40"
+                        className="rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-2 py-1 text-sm disabled:opacity-40"
                       />
                     </div>
                   )
@@ -351,13 +351,13 @@ export default function AdminProfesionales() {
               </div>
 
               <div className="mt-4 flex justify-end gap-2">
-                <button onClick={() => setEditId(null)} className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm">
+                <button onClick={() => setEditId(null)} className="rounded-lg border border-neutral-700 px-3 py-1.5 text-sm">
                   Cancelar
                 </button>
                 <button
                   onClick={guardar}
                   disabled={guardando}
-                  className="rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-60"
+                  className="rounded-lg bg-[#e3b23c] px-3 py-1.5 text-sm font-medium text-neutral-950 disabled:opacity-60"
                 >
                   {guardando ? 'Guardando…' : 'Guardar'}
                 </button>
@@ -366,18 +366,18 @@ export default function AdminProfesionales() {
           ) : (
             <div
               key={p.id}
-              className={`flex items-center gap-3 rounded-xl border border-neutral-200 p-4 ${
+              className={`flex items-center gap-3 rounded-xl border border-neutral-800 p-4 ${
                 !p.activo ? 'opacity-50' : ''
               }`}
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-100 font-medium text-rose-700">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c9a227]/15 font-medium text-[#e3b23c]">
                 {p.nombre[0]}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-neutral-900">
-                  {p.nombre} {!p.activo && <span className="text-xs text-neutral-400">(inactiva)</span>}
+                <p className="text-sm font-medium text-neutral-100">
+                  {p.nombre} {!p.activo && <span className="text-xs text-neutral-500">(inactiva)</span>}
                 </p>
-                <p className="text-xs text-neutral-500">
+                <p className="text-xs text-neutral-400">
                   {(p.profesional_servicios || []).length
                     ? (p.profesional_servicios || [])
                         .map((r) => nombreServicio[r.servicio_id])
@@ -386,13 +386,13 @@ export default function AdminProfesionales() {
                     : 'Sin servicios asignados'}
                 </p>
               </div>
-              <button onClick={() => empezarEdicion(p)} className="rounded-md border border-neutral-200 px-2 py-1 text-xs text-neutral-600">
+              <button onClick={() => empezarEdicion(p)} className="rounded-md border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-2 py-1 text-xs text-neutral-400">
                 Editar
               </button>
               <button
                 onClick={() => toggleActivo(p)}
                 className={`rounded-md border px-2 py-1 text-xs ${
-                  p.activo ? 'border-neutral-200 text-neutral-500' : 'border-emerald-300 text-emerald-700'
+                  p.activo ? 'border-neutral-800 text-neutral-400' : 'border-emerald-500/40 text-emerald-300'
                 }`}
               >
                 {p.activo ? 'Desactivar' : 'Activar'}
@@ -408,7 +408,7 @@ export default function AdminProfesionales() {
 function Marco({ children }) {
   return (
     <div className="mx-auto max-w-2xl p-4 sm:p-6">
-      <div className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">{children}</div>
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 sm:p-6">{children}</div>
     </div>
   )
 }

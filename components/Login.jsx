@@ -48,12 +48,12 @@ export default function Login() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
-      <a href="/" className="mb-6 text-center text-sm text-neutral-400">← Salón Bella</a>
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6">
-        <h1 className="text-lg font-medium text-neutral-900">
+      <a href="/" className="mb-6 text-center text-sm text-neutral-500">← Alma Nails</a>
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+        <h1 className="text-lg font-medium text-neutral-100">
           {modo === 'login' ? 'Ingresá a tu cuenta' : 'Creá tu cuenta'}
         </h1>
-        <p className="mb-4 text-sm text-neutral-500">
+        <p className="mb-4 text-sm text-neutral-400">
           {modo === 'login' ? 'Para ver y gestionar tus turnos' : 'Con nombre y WhatsApp para tus recordatorios'}
         </p>
 
@@ -67,12 +67,12 @@ export default function Login() {
           <Campo label="Email" value={email} onChange={setEmail} placeholder="maria@email.com" type="email" />
           <Campo label="Contraseña" value={pass} onChange={setPass} placeholder="••••••••" type="password" />
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-400">{error}</p>}
 
           <button
             onClick={submit}
             disabled={cargando}
-            className="w-full rounded-lg bg-rose-500 py-2.5 text-sm font-medium text-white hover:bg-rose-600 disabled:opacity-60"
+            className="w-full rounded-lg bg-[#e3b23c] py-2.5 text-sm font-medium text-neutral-950 hover:bg-[#d4a226] disabled:opacity-60"
           >
             {cargando ? 'Un momento…' : modo === 'login' ? 'Ingresar' : 'Crear cuenta'}
           </button>
@@ -80,16 +80,16 @@ export default function Login() {
 
         <button
           onClick={() => { setModo(modo === 'login' ? 'registro' : 'login'); setError('') }}
-          className="mt-4 w-full text-center text-sm text-neutral-500"
+          className="mt-4 w-full text-center text-sm text-neutral-400"
         >
           {modo === 'login' ? '¿No tenés cuenta? Registrate' : '¿Ya tenés cuenta? Ingresá'}
         </button>
       </div>
 
-      <a href="/reservar" className="mt-4 text-center text-sm text-rose-500">
+      <a href="/reservar" className="mt-4 text-center text-sm text-[#e3b23c]">
         Reservar sin cuenta →
       </a>
-      <a href="/soy-profesional" className="mt-2 text-center text-xs text-neutral-400">
+      <a href="/soy-profesional" className="mt-2 text-center text-xs text-neutral-500">
         ¿Sos del equipo? Registrate como profesional
       </a>
     </div>
@@ -99,13 +99,13 @@ export default function Login() {
 function Campo({ label, value, onChange, placeholder, type = 'text' }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm text-neutral-500">{label}</span>
+      <span className="mb-1 block text-sm text-neutral-400">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400"
+        className="w-full rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-2 text-sm outline-none focus:border-[#c9a227] focus:ring-1 focus:ring-[#c9a227]"
       />
     </label>
   )

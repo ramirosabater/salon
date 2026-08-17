@@ -71,16 +71,16 @@ export default function AdminAgenda() {
 
   // --- Estados de acceso ---
   if (perfil === undefined) {
-    return <Marco><p className="text-neutral-500">Cargando…</p></Marco>
+    return <Marco><p className="text-neutral-400">Cargando…</p></Marco>
   }
   if (!perfil) {
     return (
       <Marco>
         <h1 className="text-lg font-medium">Panel del salón</h1>
-        <p className="mt-2 text-sm text-neutral-500">
+        <p className="mt-2 text-sm text-neutral-400">
           Iniciá sesión desde la página principal y volvé a esta dirección.
         </p>
-        <a href="/" className="mt-4 inline-block text-sm text-rose-500 underline">
+        <a href="/" className="mt-4 inline-block text-sm text-[#e3b23c] underline">
           Ir a la página principal
         </a>
       </Marco>
@@ -90,7 +90,7 @@ export default function AdminAgenda() {
     return (
       <Marco>
         <h1 className="text-lg font-medium">Sin acceso</h1>
-        <p className="mt-2 text-sm text-neutral-500">
+        <p className="mt-2 text-sm text-neutral-400">
           Esta sección es solo para el personal del salón.
         </p>
       </Marco>
@@ -103,16 +103,16 @@ export default function AdminAgenda() {
       <AdminNav actual="agenda" />
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-medium text-neutral-900">Agenda del día</h1>
-          <p className="text-sm text-neutral-500">Hola, {perfil.nombre || perfil.email}</p>
+          <h1 className="text-xl font-medium text-neutral-100">Agenda del día</h1>
+          <p className="text-sm text-neutral-400">Hola, {perfil.nombre || perfil.email}</p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setFecha(sumarDias(fecha, -1))} className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm">←</button>
+          <button onClick={() => setFecha(sumarDias(fecha, -1))} className="rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-1.5 text-sm">←</button>
           <span className="min-w-[150px] text-center text-sm font-medium capitalize">
             {fecha.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'short' })}
           </span>
-          <button onClick={() => setFecha(sumarDias(fecha, 1))} className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm">→</button>
-          <button onClick={() => setFecha(new Date())} className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600">Hoy</button>
+          <button onClick={() => setFecha(sumarDias(fecha, 1))} className="rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-1.5 text-sm">→</button>
+          <button onClick={() => setFecha(new Date())} className="rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-100 placeholder-neutral-500 px-3 py-1.5 text-sm text-neutral-400">Hoy</button>
         </div>
       </div>
 
@@ -122,11 +122,11 @@ export default function AdminAgenda() {
         <Tarjeta label="Ingreso estimado" valor={money(ingresoDia)} />
       </div>
 
-      {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
-      {cargando && <p className="text-sm text-neutral-400">Cargando agenda…</p>}
+      {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
+      {cargando && <p className="text-sm text-neutral-500">Cargando agenda…</p>}
 
       {!cargando && porProfesional.length === 0 && (
-        <p className="py-8 text-center text-sm text-neutral-400">
+        <p className="py-8 text-center text-sm text-neutral-500">
           No hay turnos para este día.
         </p>
       )}
@@ -134,12 +134,12 @@ export default function AdminAgenda() {
       <div className="space-y-6">
         {porProfesional.map((p) => (
           <div key={p.nombre}>
-            <div className="mb-2 flex items-center gap-2 border-b border-neutral-100 pb-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-100 text-sm font-medium text-rose-700">
+            <div className="mb-2 flex items-center gap-2 border-b border-neutral-800 pb-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#c9a227]/15 text-sm font-medium text-[#e3b23c]">
                 {p.nombre[0]}
               </div>
-              <span className="font-medium text-neutral-800">{p.nombre}</span>
-              <span className="text-sm text-neutral-400">
+              <span className="font-medium text-neutral-200">{p.nombre}</span>
+              <span className="text-sm text-neutral-500">
                 · {p.turnos.filter((t) => t.estado !== 'cancelado').length} turnos
               </span>
             </div>
@@ -152,20 +152,20 @@ export default function AdminAgenda() {
                   <div
                     key={t.id}
                     className={`flex items-center gap-3 rounded-lg border p-3 ${
-                      cancelado ? 'border-neutral-100 bg-neutral-50 opacity-60' : 'border-neutral-200'
+                      cancelado ? 'border-neutral-800 bg-white/5 opacity-60' : 'border-neutral-800'
                     }`}
                   >
                     <div className="text-center">
-                      <p className="text-sm font-medium text-neutral-900">{fmtHora(t.inicio)}</p>
-                      <p className="text-[11px] text-neutral-400">{t.servicios?.duracion_min}min</p>
+                      <p className="text-sm font-medium text-neutral-100">{fmtHora(t.inicio)}</p>
+                      <p className="text-[11px] text-neutral-500">{t.servicios?.duracion_min}min</p>
                     </div>
                     <div className="flex-1">
-                      <p className={`text-sm font-medium ${cancelado ? 'line-through' : 'text-neutral-900'}`}>
+                      <p className={`text-sm font-medium ${cancelado ? 'line-through' : 'text-neutral-100'}`}>
                         {t.cliente?.nombre || t.cliente_nombre || 'Cliente'}
                       </p>
-                      <p className="text-sm text-neutral-500">{t.servicios?.nombre}</p>
+                      <p className="text-sm text-neutral-400">{t.servicios?.nombre}</p>
                     </div>
-                    <span className="text-sm font-medium text-neutral-700">
+                    <span className="text-sm font-medium text-neutral-300">
                       {money(t.servicios?.precio)}
                     </span>
                     {!cancelado && (
@@ -175,7 +175,7 @@ export default function AdminAgenda() {
                             href={`https://wa.me/${limpiarTel(tel)}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="rounded-md border border-emerald-200 px-2 py-1 text-xs text-emerald-700"
+                            className="rounded-md border border-emerald-500/30 px-2 py-1 text-xs text-emerald-300"
                             title="Escribir por WhatsApp"
                           >
                             WhatsApp
@@ -183,13 +183,13 @@ export default function AdminAgenda() {
                         )}
                         <button
                           onClick={() => cancelarTurno(t.id)}
-                          className="rounded-md border border-red-200 px-2 py-1 text-xs text-red-600"
+                          className="rounded-md border border-red-500/40 px-2 py-1 text-xs text-red-400"
                         >
                           Cancelar
                         </button>
                       </div>
                     )}
-                    {cancelado && <span className="text-xs text-neutral-400">Cancelado</span>}
+                    {cancelado && <span className="text-xs text-neutral-500">Cancelado</span>}
                   </div>
                 )
               })}
@@ -217,15 +217,15 @@ function limpiarTel(tel) {
 function Marco({ children }) {
   return (
     <div className="mx-auto max-w-2xl p-4 sm:p-6">
-      <div className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">{children}</div>
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 sm:p-6">{children}</div>
     </div>
   )
 }
 function Tarjeta({ label, valor }) {
   return (
-    <div className="flex-1 rounded-lg bg-neutral-50 p-3">
-      <p className="text-xs text-neutral-500">{label}</p>
-      <p className="text-lg font-medium text-neutral-900">{valor}</p>
+    <div className="flex-1 rounded-lg bg-white/5 p-3">
+      <p className="text-xs text-neutral-400">{label}</p>
+      <p className="text-lg font-medium text-neutral-100">{valor}</p>
     </div>
   )
 }
