@@ -89,6 +89,9 @@ export default function Login() {
       <a href="/reservar" className="mt-4 text-center text-sm text-rose-500">
         Reservar sin cuenta →
       </a>
+      <a href="/soy-profesional" className="mt-2 text-center text-xs text-neutral-400">
+        ¿Sos del equipo? Registrate como profesional
+      </a>
     </div>
   )
 }

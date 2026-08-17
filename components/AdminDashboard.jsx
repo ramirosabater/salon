@@ -31,7 +31,7 @@ export default function AdminDashboard() {
     miPerfil().then(setPerfil).catch(() => setPerfil(null))
   }, [])
 
-  const esAdmin = perfil && (perfil.rol === 'admin' || perfil.rol === 'profesional')
+  const esAdmin = perfil && perfil.rol === 'admin'
 
   useEffect(() => {
     if (!esAdmin) return

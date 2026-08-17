@@ -17,6 +17,8 @@ import {
   setServiciosDeProfesional,
   getHorariosDeProfesional,
   setHorariosDeProfesional,
+  getCodigoProfesional,
+  setCodigoProfesional,
 } from '@/lib/reservas'
 import AdminNav from '@/components/AdminNav'
 
@@ -51,17 +53,21 @@ export default function AdminProfesionales() {
 
   const [nuevoNombre, setNuevoNombre] = useState('')
   const [mostrarAlta, setMostrarAlta] = useState(false)
+  const [codigo, setCodigo] = useState('')
+  const [editandoCodigo, setEditandoCodigo] = useState(false)
+  const [codigoBorrador, setCodigoBorrador] = useState('')
 
   useEffect(() => {
     miPerfil().then(setPerfil).catch(() => setPerfil(null))
   }, [])
 
-  const esAdmin = perfil && (perfil.rol === 'admin' || perfil.rol === 'profesional')
+  const esAdmin = perfil && perfil.rol === 'admin'
 
   useEffect(() => {
     if (!esAdmin) return
     recargar()
     getServiciosAdmin().then((s) => setServicios(s.filter((x) => x.activo))).catch(() => {})
+    getCodigoProfesional().then(setCodigo).catch(() => {})
   }, [esAdmin])
 
   function recargar() {
@@ -167,6 +173,17 @@ export default function AdminProfesionales() {
     }
   }
 
+  async function guardarCodigo() {
+    setError('')
+    try {
+      await setCodigoProfesional(codigoBorrador.trim())
+      setCodigo(codigoBorrador.trim())
+      setEditandoCodigo(false)
+    } catch (e) {
+      setError(e.message)
+    }
+  }
+
   const nombreServicio = useMemo(() => {
     const m = {}
     for (const s of servicios) m[s.id] = s.nombre
@@ -194,6 +211,34 @@ export default function AdminProfesionales() {
   return (
     <Marco>
       <AdminNav actual="profesionales" />
+
+      <div className="mb-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+          Código para que el equipo se registre
+        </p>
+        {editandoCodigo ? (
+          <div className="mt-2 flex gap-2">
+            <input
+              value={codigoBorrador}
+              onChange={(e) => setCodigoBorrador(e.target.value)}
+              className="flex-1 rounded-lg border border-neutral-200 px-3 py-1.5 text-sm"
+            />
+            <button onClick={guardarCodigo} className="rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white">Guardar</button>
+            <button onClick={() => setEditandoCodigo(false)} className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm">Cancelar</button>
+          </div>
+        ) : (
+          <div className="mt-1 flex items-center gap-3">
+            <span className="text-lg font-medium tracking-wider text-neutral-900">{codigo || '—'}</span>
+            <button
+              onClick={() => { setCodigoBorrador(codigo); setEditandoCodigo(true) }}
+              className="rounded-md border border-neutral-200 px-2 py-1 text-xs text-neutral-600"
+            >
+              Cambiar
+            </button>
+            <span className="text-xs text-neutral-400">Compartilo solo con tus profesionales</span>
+          </div>
+        )}
+      </div>
 
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-medium text-neutral-900">Profesionales</h1>

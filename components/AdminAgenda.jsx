@@ -31,7 +31,7 @@ export default function AdminAgenda() {
       .catch(() => setPerfil(null))
   }, [])
 
-  const esAdmin = perfil && (perfil.rol === 'admin' || perfil.rol === 'profesional')
+  const esAdmin = perfil && perfil.rol === 'admin'
 
   // Cargar la agenda del día elegido
   useEffect(() => {
