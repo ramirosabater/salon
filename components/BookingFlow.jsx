@@ -139,7 +139,7 @@ export default function BookingFlow() {
             <Check />
           </div>
           <h2 className="text-lg font-medium text-neutral-900">¡Turno confirmado!</h2>
-          <p className="mt-1 text-sm text-neutral-500">Te llega la confirmación por WhatsApp.</p>
+          <p className="mt-1 text-sm text-neutral-500">Guardá la fecha. Te esperamos en el salón.</p>
           <div className="mx-auto mt-6 max-w-sm rounded-xl bg-neutral-50 p-4 text-left">
             <p className="font-medium text-neutral-900">{sel.servicio.nombre}</p>
             <p className="mt-1 text-sm text-neutral-500">
@@ -344,11 +344,12 @@ function AuthInline({ onListo, onError }) {
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [nombre, setNombre] = useState('')
+  const [telefono, setTelefono] = useState('')
   const [cargando, setCargando] = useState(false)
 
   async function submit() {
     onError('')
-    if (!email.trim() || !pass.trim() || (modo === 'registro' && !nombre.trim())) {
+    if (!email.trim() || !pass.trim() || (modo === 'registro' && (!nombre.trim() || !telefono.trim()))) {
       onError('Completá todos los campos.')
       return
     }
@@ -357,7 +358,7 @@ function AuthInline({ onListo, onError }) {
       const user =
         modo === 'login'
           ? await iniciarSesion({ email, password: pass })
-          : await registrarse({ email, password: pass, nombre })
+          : await registrarse({ email, password: pass, nombre, telefono })
       onListo(user)
     } catch (e) {
       onError(e.message)
@@ -369,7 +370,10 @@ function AuthInline({ onListo, onError }) {
   return (
     <div className="space-y-3">
       {modo === 'registro' && (
-        <Input label="Nombre y apellido" value={nombre} onChange={setNombre} placeholder="María Pérez" />
+        <>
+          <Input label="Nombre y apellido" value={nombre} onChange={setNombre} placeholder="María Pérez" />
+          <Input label="WhatsApp" value={telefono} onChange={setTelefono} placeholder="11 2345 6789" type="tel" />
+        </>
       )}
       <Input label="Email" value={email} onChange={setEmail} placeholder="maria@email.com" type="email" />
       <Input label="Contraseña" value={pass} onChange={setPass} placeholder="••••••••" type="password" />
