@@ -147,7 +147,7 @@ export default function AdminAgenda() {
             <div className="space-y-2">
               {p.turnos.map((t) => {
                 const cancelado = t.estado === 'cancelado'
-                const tel = t.cliente?.telefono
+                const tel = t.cliente?.telefono || t.cliente_telefono
                 return (
                   <div
                     key={t.id}
@@ -161,7 +161,7 @@ export default function AdminAgenda() {
                     </div>
                     <div className="flex-1">
                       <p className={`text-sm font-medium ${cancelado ? 'line-through' : 'text-neutral-900'}`}>
-                        {t.cliente?.nombre || 'Cliente'}
+                        {t.cliente?.nombre || t.cliente_nombre || 'Cliente'}
                       </p>
                       <p className="text-sm text-neutral-500">{t.servicios?.nombre}</p>
                     </div>

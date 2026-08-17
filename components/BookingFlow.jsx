@@ -2,11 +2,9 @@
 
 // ============================================================
 //  BookingFlow.jsx — flujo de reserva del portal del cliente
-//  Conecta las pantallas diseñadas con el módulo reservas.js.
-//  Estilado con Tailwind (re-tematizable). Next.js App Router.
-//
-//  Uso:  import BookingFlow from '@/components/BookingFlow'
-//        <BookingFlow />
+//  Permite reservar como invitado (nombre + WhatsApp) o con
+//  cuenta. Conecta con reservas.js.
+//  Uso: app/reservar/page.tsx
 // ============================================================
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -14,10 +12,11 @@ import {
   getProfesionalesDeServicio,
   getHorariosDisponibles,
   reservar,
+  reservarInvitado,
   usuarioActual,
   iniciarSesion,
   registrarse,
-} from '@/lib/reservas' // ajustá la ruta a donde pongas reservas.js
+} from '@/lib/reservas'
 
 const PASOS = ['Servicio', 'Profesional', 'Fecha y hora', 'Tus datos', 'Confirmar']
 
@@ -36,21 +35,20 @@ export default function BookingFlow() {
   const [error, setError] = useState('')
 
   const [sel, setSel] = useState({
-    servicio: null,       // objeto servicio
-    profesionalId: null,  // number o 'any'
-    fecha: null,          // 'YYYY-MM-DD'
-    slot: null,           // { profesional_id, inicio }
+    servicio: null,
+    profesionalId: null,
+    fecha: null,
+    slot: null,
   })
   const [usuario, setUsuario] = useState(null)
-  const [confirmado, setConfirmado] = useState(null) // turno creado
+  const [invitado, setInvitado] = useState({ nombre: '', telefono: '' })
+  const [confirmado, setConfirmado] = useState(null)
 
-  // Cargar servicios y usuario al montar
   useEffect(() => {
     getServicios().then(setServicios).catch((e) => setError(e.message))
     usuarioActual().then(setUsuario)
   }, [])
 
-  // Al elegir servicio, traer sus profesionales
   useEffect(() => {
     if (!sel.servicio) return
     getProfesionalesDeServicio(sel.servicio.id)
@@ -58,7 +56,6 @@ export default function BookingFlow() {
       .catch((e) => setError(e.message))
   }, [sel.servicio])
 
-  // Al elegir fecha, traer horarios disponibles
   useEffect(() => {
     if (!sel.servicio || !sel.fecha) return
     setCargando(true)
@@ -69,7 +66,6 @@ export default function BookingFlow() {
       .finally(() => setCargando(false))
   }, [sel.servicio, sel.fecha, sel.profesionalId])
 
-  // Próximos 14 días para el selector de fecha
   const dias = useMemo(() => {
     const out = []
     for (let i = 0; i < 14; i++) {
@@ -80,7 +76,6 @@ export default function BookingFlow() {
     return out
   }, [])
 
-  // Horarios únicos por hora (para "cualquiera", varias profes dan la misma hora)
   const horasUnicas = useMemo(() => {
     const vistos = new Set()
     return slots.filter((s) => {
@@ -103,8 +98,10 @@ export default function BookingFlow() {
     if (paso === 1 && !sel.profesionalId) return
     if (paso === 2 && !sel.slot) return
     if (paso === 3 && !usuario) {
-      setError('Iniciá sesión o registrate para continuar.')
-      return
+      if (!invitado.nombre.trim() || !invitado.telefono.trim()) {
+        setError('Completá tu nombre y WhatsApp para continuar.')
+        return
+      }
     }
     setPaso((p) => Math.min(p + 1, PASOS.length - 1))
   }
@@ -117,14 +114,24 @@ export default function BookingFlow() {
     setError('')
     setCargando(true)
     try {
-      const turno = await reservar({
-        servicioId: sel.servicio.id,
-        inicioISO: sel.slot.inicio,
-        profesionalId: sel.slot.profesional_id, // slot ya trae la profe concreta
-      })
+      let turno
+      if (usuario) {
+        turno = await reservar({
+          servicioId: sel.servicio.id,
+          inicioISO: sel.slot.inicio,
+          profesionalId: sel.slot.profesional_id,
+        })
+      } else {
+        turno = await reservarInvitado({
+          servicioId: sel.servicio.id,
+          inicioISO: sel.slot.inicio,
+          profesionalId: sel.slot.profesional_id,
+          nombre: invitado.nombre,
+          telefono: invitado.telefono,
+        })
+      }
       setConfirmado(turno)
     } catch (e) {
-      // Errores legibles que vienen de reservar_turno (p. ej. "se acaba de ocupar")
       setError(e.message)
     } finally {
       setCargando(false)
@@ -146,6 +153,7 @@ export default function BookingFlow() {
               {fmtFechaLarga(sel.slot.inicio)} · {fmtHora(sel.slot.inicio)}
             </p>
           </div>
+          <a href="/" className="mt-6 inline-block text-sm text-rose-500 underline">Volver al inicio</a>
         </div>
       </Marco>
     )
@@ -153,18 +161,11 @@ export default function BookingFlow() {
 
   return (
     <Marco>
-      {/* Barra de pasos */}
       <div className="mb-6 flex items-center gap-1.5">
         {PASOS.map((s, i) => (
           <div key={s} className="flex flex-1 flex-col items-center gap-1.5">
-            <div
-              className={`h-1 w-full rounded-full ${
-                i <= paso ? 'bg-rose-400' : 'bg-neutral-200'
-              }`}
-            />
-            <span className={`text-[11px] ${i === paso ? 'text-rose-500' : 'text-neutral-400'}`}>
-              {s}
-            </span>
+            <div className={`h-1 w-full rounded-full ${i <= paso ? 'bg-rose-400' : 'bg-neutral-200'}`} />
+            <span className={`text-[11px] ${i === paso ? 'text-rose-500' : 'text-neutral-400'}`}>{s}</span>
           </div>
         ))}
       </div>
@@ -174,9 +175,7 @@ export default function BookingFlow() {
           <Seccion titulo="¿Qué te querés hacer?" sub="Elegí un servicio para empezar">
             {Object.entries(serviciosPorCat).map(([cat, items]) => (
               <div key={cat}>
-                <p className="mt-4 mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500">
-                  {cat}
-                </p>
+                <p className="mt-4 mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500">{cat}</p>
                 {items.map((s) => (
                   <Fila
                     key={s.id}
@@ -280,7 +279,12 @@ export default function BookingFlow() {
                 Sesión iniciada como {usuario.email}. Ya podés confirmar.
               </div>
             ) : (
-              <AuthInline onListo={setUsuario} onError={setError} />
+              <DatosInvitado
+                invitado={invitado}
+                setInvitado={setInvitado}
+                onLogin={setUsuario}
+                onError={setError}
+              />
             )}
           </Seccion>
         )}
@@ -295,7 +299,7 @@ export default function BookingFlow() {
               />
               <ResumenFila label="Fecha" val={fmtFechaLarga(sel.slot.inicio)} />
               <ResumenFila label="Horario" val={`${fmtHora(sel.slot.inicio)} · ${sel.servicio.duracion_min} min`} />
-              {usuario && <ResumenFila label="A nombre de" val={usuario.email} />}
+              <ResumenFila label="A nombre de" val={usuario ? usuario.email : invitado.nombre} />
             </div>
             <div className="flex items-center justify-between px-1 pt-3">
               <span className="text-sm text-neutral-500">Total</span>
@@ -311,10 +315,7 @@ export default function BookingFlow() {
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
       <div className="mt-4 flex items-center justify-between">
-        <button
-          onClick={volver}
-          className={`text-sm text-neutral-600 ${paso === 0 ? 'invisible' : ''}`}
-        >
+        <button onClick={volver} className={`text-sm text-neutral-600 ${paso === 0 ? 'invisible' : ''}`}>
           ← Atrás
         </button>
         {paso < 4 ? (
@@ -338,9 +339,36 @@ export default function BookingFlow() {
   )
 }
 
+// ---------- Datos del invitado + opción de iniciar sesión ----------
+function DatosInvitado({ invitado, setInvitado, onLogin, onError }) {
+  const [mostrarLogin, setMostrarLogin] = useState(false)
+  if (mostrarLogin) {
+    return (
+      <div>
+        <AuthInline onListo={onLogin} onError={onError} />
+        <button onClick={() => setMostrarLogin(false)} className="mt-3 w-full text-center text-sm text-neutral-500">
+          ← Reservar como invitado
+        </button>
+      </div>
+    )
+  }
+  return (
+    <div className="space-y-3">
+      <Input label="Nombre y apellido" value={invitado.nombre}
+        onChange={(v) => setInvitado({ ...invitado, nombre: v })} placeholder="María Pérez" />
+      <Input label="WhatsApp" value={invitado.telefono}
+        onChange={(v) => setInvitado({ ...invitado, telefono: v })} placeholder="11 2345 6789" type="tel" />
+      <p className="text-xs text-neutral-400">No necesitás cuenta para reservar.</p>
+      <button onClick={() => setMostrarLogin(true)} className="w-full text-center text-sm text-rose-500">
+        ¿Ya sos cliente? Iniciá sesión
+      </button>
+    </div>
+  )
+}
+
 // ---------- Login / registro embebido ----------
 function AuthInline({ onListo, onError }) {
-  const [modo, setModo] = useState('login') // 'login' | 'registro'
+  const [modo, setModo] = useState('login')
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
   const [nombre, setNombre] = useState('')
@@ -377,17 +405,12 @@ function AuthInline({ onListo, onError }) {
       )}
       <Input label="Email" value={email} onChange={setEmail} placeholder="maria@email.com" type="email" />
       <Input label="Contraseña" value={pass} onChange={setPass} placeholder="••••••••" type="password" />
-      <button
-        onClick={submit}
-        disabled={cargando}
-        className="w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-medium text-white disabled:opacity-60"
-      >
+      <button onClick={submit} disabled={cargando}
+        className="w-full rounded-lg bg-neutral-900 py-2.5 text-sm font-medium text-white disabled:opacity-60">
         {cargando ? 'Un momento…' : modo === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
       </button>
-      <button
-        onClick={() => setModo(modo === 'login' ? 'registro' : 'login')}
-        className="w-full text-center text-sm text-neutral-500"
-      >
+      <button onClick={() => setModo(modo === 'login' ? 'registro' : 'login')}
+        className="w-full text-center text-sm text-neutral-500">
         {modo === 'login' ? '¿No tenés cuenta? Registrate' : '¿Ya tenés cuenta? Iniciá sesión'}
       </button>
     </div>
@@ -397,9 +420,7 @@ function AuthInline({ onListo, onError }) {
 // ---------- Piezas de UI ----------
 function Marco({ children }) {
   return (
-    <div className="mx-auto max-w-xl rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-      {children}
-    </div>
+    <div className="mx-auto max-w-xl rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">{children}</div>
   )
 }
 function Seccion({ titulo, sub, children }) {

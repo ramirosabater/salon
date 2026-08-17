@@ -10,6 +10,7 @@ export default function AdminNav({ actual }) {
     { href: '/admin', label: 'Agenda', id: 'agenda' },
     { href: '/admin/servicios', label: 'Servicios', id: 'servicios' },
     { href: '/admin/profesionales', label: 'Profesionales', id: 'profesionales' },
+    { href: '/admin/dashboard', label: 'Ingresos', id: 'dashboard' },
   ]
   return (
     <div className="mb-5 flex gap-1 border-b border-neutral-200 pb-2 text-sm">

@@ -1,9 +1,5 @@
-import BookingFlow from '@/components/BookingFlow'
+import Landing from '@/components/Landing'
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-neutral-50 py-10 px-4">
-      <BookingFlow />
-    </main>
-  )
+  return <Landing />
 }
